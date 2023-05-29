@@ -1,0 +1,115 @@
+%YAML 1.1   # Reference card
+---
+
+#https://quickref.me/yaml.html
+#https://jsonformatter.org/yaml-to-json
+
+Collection indicators:
+  '? ' : Key indicator. syntax, the question mask refers to the use of a question mark symbol ("?") as a key indicator. It is used to represent a complex key or to specify a mapping key that requires additional properties or conditions.
+  The question mark key indicator is typically used in YAML mappings where the key itself has multiple properties or attributes. By using a question mark followed by a space, you indicate that the subsequent lines provide additional details or conditions for that particular key.
+  It's important to note that the question mask key indicator is optional in YAML syntax. You can choose to use the more common colon (":") key indicator for simple keys or mappings without additional properties.
+  - ? name
+  : John Doe
+  - ? age
+  : 30
+  - ? occupation
+  : Software Engineer
+  #equal
+  - name: John Doe
+  - age: 30
+  - occupation: Software Engineer
+
+  ': ' : Value indicator. a key indicator refers to the symbol or character that marks the beginning of a key in a key-value pair. It is used to define the unique identifier or name for a particular value. The key indicator separates the key from its corresponding value and helps in structuring the data within a YAML document
+  '- ' : Nested series entry indicator.
+  ', ' : Separate in-line branch entries.
+  '[]' : Surround in-line series branch.
+  '{}' : Surround in-line keyed branch.
+Scalar indicators:
+  '''' : Surround in-line unescaped scalar ('' escaped ').
+  '"'  : Surround in-line escaped scalar (see escape codes below).
+  '|'  : Block scalar indicator.
+  '>'  : Folded scalar indicator.
+  '-'  : Strip chomp modifier ('|-' or '>-').
+  '+'  : Keep chomp modifier ('|+' or '>+').
+  1-9  : Explicit indentation modifier ('|1' or '>2').
+         # Modifiers can be combined ('|2-', '>+1').
+Alias indicators:
+  '&'  : Anchor property. defind a tag
+  .template_build: &build
+
+  '*'  : Alias indicator. refer to that tag 
+  build_dev: #load env from build
+  <<: *build
+
+Tag property: # Usually unspecified.
+  #In YAML syntax, the exclamation mark ("!") is used as a non-specific tag indicator. It is used to assign a tag to a YAML node without specifying a specific tag type. By default, if no specific tag is provided, YAML assumes a default tag based on the node's type, such as "!!map" for mappings, "!!seq" for sequences, and "!!str" for strings.
+  Tags in YAML provide a way to associate a specific data type or class with a YAML node, allowing for more precise interpretation and processing of the data. They can be useful when dealing with complex data structures or when you want to ensure the correct handling of specific types.
+  Defind type, use for complex structures
+
+  none    : Unspecified tag (automatically resolved by application).
+  '!'     : Non-specific tag (by default, "!!map"/"!!seq"/"!!str").
+  '!foo'  : Primary (by convention, means a local "!foo" tag). => custom
+  '!!foo' : Secondary (by convention, means "tag:yaml.org,2002:foo"). => custom
+  '!h!foo': Requires "%TAG !h! <prefix>" (and then means "<prefix>foo").
+  '!<foo>': Verbatim tag (always means "foo").
+
+- !!seq
+- name: John Doeag
+- !!int 456
+- !!bool "true"
+
+
+Document indicators:
+  '%'  : Directive indicator. In YAML syntax, the directive indicator refers to the use of the percentage sign ("%") as a special character to indicate YAML directives. Directives provide instructions or configuration settings that affect the YAML parser or processor.
+  '---': Document header.
+  '...': Document terminator.
+Misc indicators:
+  ' #' : Throwaway comment indicator.
+  '`@' : Both reserved for future use.
+
+
+  --- Document Start Indicator: The --- indicator is used to mark the start of a YAML document. It separates multiple documents within a single YAML file.
+
+  ... Document End Indicator: The ... indicator marks the end of a YAML document. It is optional and not required if the YAML file contains only one document.
+  
+  # Comment Indicator: The # symbol is used to indicate comments in YAML. Everything after the # symbol on a line is treated as a comment and is ignored during parsing.
+  
+  > and | Scalar Style Indicators: These indicators define the style of scalar values in YAML. The > character is used for folded style, where newlines are converted to spaces, and the content can span multiple lines. The | character is used for literal style, preserving newlines and indentation exactly as they appear.
+  
+  & Anchor Indicator: The & symbol is used to define an anchor for a YAML node. Anchors allow referencing the same node at multiple points within the YAML document.
+  
+  * Alias Indicator: The * symbol is used to create an alias, referencing a previously defined anchored node within the YAML document.
+  
+  In YAML syntax, the "@" symbol is indeed reserved for future use. It means that the symbol has been designated for potential future functionality or extensions to the YAML specification. However, as of the current YAML specification (up to YAML 1.2), the specific usage and meaning of the "@" symbol have not been defined.
+
+  Reserved indicators like "@" are placeholders that may be used in future versions of the YAML specification to introduce new features or functionalities. The intent behind reserving certain symbols is to allow for backward compatibility and to avoid conflicts with potential future YAML enhancements.
+
+Special keys:
+  '='  : Default "value" mapping key.
+  '<<' : Merge keys from another mapping.
+  
+Core types: # Default automatic tags.
+  '!!map' : { Hash table, dictionary, mapping }
+  '!!seq' : { List, array, tuple, vector, sequence }
+  '!!str' : Unicode string
+More types:
+  '!!set' : { cherries, plums, apples }
+  '!!omap': [ one: 1, two: 2 ]
+Language Independent Scalar types:
+  { ~, null }              : Null (no value).
+  [ 1234, 0x4D2, 02333 ]   : [ Decimal int, Hexadecimal int, Octal int ]
+  [ 1_230.15, 12.3015e+02 ]: [ Fixed float, Exponential float ]
+  [ .inf, -.Inf, .NAN ]    : [ Infinity (float), Negative, Not a number ]
+  { Y, true, Yes, ON  }    : Boolean true
+  { n, FALSE, No, off }    : Boolean false
+  ? !!binary >
+      R0lG...BADS=
+  : >-
+      Base 64 binary value.
+Escape codes:
+ Numeric   : { "\x12": 8-bit, "\u1234": 16-bit, "\U00102030": 32-bit }
+ Protective: { "\\": '\', "\"": '"', "\ ": ' ', "\<TAB>": TAB }
+ C         : { "\0": NUL, "\a": BEL, "\b": BS, "\f": FF, "\n": LF, "\r": CR,
+             "\t": TAB, "\v": VTAB }
+ Additional: { "\e": ESC, "\_": NBSP, "\N": NEL, "\L": LS, "\P": PS }
+...
